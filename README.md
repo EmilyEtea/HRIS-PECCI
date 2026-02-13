@@ -9,8 +9,8 @@ An HRIS (Human Resources Information System) is essentially the digital backbone
 
 # Feb. 13, 2026
 - trello.com: https://trello.com/b/OtuCulJh/task-management-hris-pecci
-- gdrive for compilation of documents: https://drive.google.com/drive/folders/1S09tiQIVEtk83Ix50_k1KK_q565XaheL?usp=sharing
-
+- gdrive for compilation of documents: https://drive.google.com/drive/folders/1pNGtwZX8BYrwyHQ5AcolX130bww97Wo_?usp=sharing
+  
 By: 
 Aguilar, Arkin Reinier 
 De Guxman, Maxenne 
