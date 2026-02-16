@@ -12,7 +12,7 @@ An HRIS (Human Resources Information System) is essentially the digital backbone
 - gdrive for compilation of documents: https://drive.google.com/drive/folders/1pNGtwZX8BYrwyHQ5AcolX130bww97Wo_?usp=sharing
   
 By: 
-Aguilar, Arkin Reinier 
-De Guxman, Maxenne 
-Etea, Emily 
+Aguilar, Arkin Reinier ;
+De Guzman, Maxenne ;
+Etea, Emily ;
 Soriano, Bernice Elyssa 
