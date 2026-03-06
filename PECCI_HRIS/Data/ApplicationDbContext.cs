@@ -17,7 +17,6 @@ namespace PECCI_HRIS.Data
         {
             modelBuilder.Entity<EmployeeInfo>().ToTable("tbl_employee_info");
             modelBuilder.Entity<UserAccount>().ToTable("tbl_user_account")
-                ioijooijjioioj
         }
     }
 }
