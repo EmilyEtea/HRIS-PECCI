@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PECCI_HRIS.Models;
-using System.Collections.Generic;
-using System.Reflection.Emit;
 
 namespace PECCI_HRIS.Data
 {
@@ -12,11 +10,17 @@ namespace PECCI_HRIS.Data
         // Links the C# Code to the SQL tables created
         public DbSet<EmployeeInfo> EmployeeInfos { get; set; }
         public DbSet<UserAccount> UserAccounts { get; set; }
+        public DbSet<LeaveRequest> LeaveRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Call the base method first to ensure identity/core configs are loaded
+            base.OnModelCreating(modelBuilder);
+
+            // Mapping C# Models to actual SQL Table Names
             modelBuilder.Entity<EmployeeInfo>().ToTable("tbl_employee_info");
-            modelBuilder.Entity<UserAccount>().ToTable("tbl_user_account")
+            modelBuilder.Entity<UserAccount>().ToTable("tbl_user_account");
+            modelBuilder.Entity<LeaveRequest>().ToTable("tbl_leave_request");
         }
     }
 }

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<PECCI_HRIS.Models.DashboardViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Employee</th>
+            <th>Department</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.User.userName</td>
+                <td>@item.User.employeeDepartment</td>
+                <td>
+                    @if (item.IsOnLeave)
+                    {
+                        <span class="badge rounded-pill bg-warning text-dark">On Leave</span>
+                    }
+                    else
+                    {
+                        <span class="badge rounded-pill bg-success-light text-success">Active</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

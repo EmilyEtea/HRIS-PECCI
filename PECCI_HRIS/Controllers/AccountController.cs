@@ -1,9 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 using PECCI_HRIS.Data;
 using PECCI_HRIS.Models;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace PECCI_HRIS.Controllers
+
 {
     public class AccountController : Controller
     {
@@ -20,26 +26,43 @@ namespace PECCI_HRIS.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // We check the database for the user you just added via SQL
                 var user = _context.UserAccounts
                     .FirstOrDefault(u => u.userName == model.UserName && u.userPassword == model.Password);
 
                 if (user != null)
                 {
-                    // For now, we redirect to Home if successful
-                    return RedirectToAction("Index", "Home");
+                    // Assign Role: If username contains 'admin', they get the Admin role.
+                    string userRole = user.userName.ToLower().Contains("admin") ? "Admin" : "Employee";
+
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, user.userName),
+                        new Claim(ClaimTypes.Role, userRole),
+                        new Claim("EmployeeID", user.employeeID)
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    // Signs the user in and establishes their role
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity));
+
+                    // Redirects to Dashboard on success
+                    return RedirectToAction("Index", "Dashboard");
                 }
 
                 ModelState.AddModelError("", "Invalid username or password.");
             }
             return View(model);
         }
-        public IActionResult Logout()
+
+        public async Task<IActionResult> Logout()
         {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
     }
