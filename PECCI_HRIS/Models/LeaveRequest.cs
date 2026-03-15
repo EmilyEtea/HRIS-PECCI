@@ -27,6 +27,29 @@ namespace PECCI_HRIS.Models
         public DateTime? dateFiled { get; set; } = DateTime.Now; // DATETIME
 
         // Logic: Calculate total days automatically based on start and end date
-        public int TotalDays => (endDate - startDate).Days + 1;
+        //public int TotalDays => (endDate - startDate).Days + 1;
+
+        //list of holidays, to be populated from DB
+        public List<DateTime>? Holidays { get; set; }
+        
+        // Calculates total leave days excluding weekends and holidays
+        public int TotalDays
+        {
+            get
+            {
+                int totalDays = 0;
+                for (var date = startDate.Date; date <= endDate.Date; date = date.AddDays(1))
+                {
+                    // Count only weekdays
+                    if (date.DayOfWeek != DayOfWeek.Saturday && date.DayOfWeek != DayOfWeek.Sunday)
+                    {
+                        // Skip holidays if provided
+                        if (Holidays == null || !Holidays.Contains(date))
+                            totalDays++;
+                    }
+                }
+                return totalDays;
+            }
+        }
     }
 }
