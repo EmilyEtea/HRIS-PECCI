@@ -7,6 +7,7 @@ using PECCI_HRIS.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System;
 
 namespace PECCI_HRIS.Controllers
 {
@@ -19,16 +20,12 @@ namespace PECCI_HRIS.Controllers
             _context = context;
         }
 
-        // GET: /Account/Login
         public IActionResult Login()
         {
-            // NEW LOGIC: If the user is already logged in, bounce them back to the Dashboard
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
-
-            // Otherwise, show the normal login screen
             return View();
         }
 
@@ -37,13 +34,22 @@ namespace PECCI_HRIS.Controllers
         {
             if (ModelState.IsValid)
             {
+                // 1. Fetch the user based on credentials
                 var user = _context.UserAccounts
                     .FirstOrDefault(u => u.userName == model.UserName && u.userPassword == model.Password);
 
                 if (user != null)
                 {
-                    // Assign Role: If username contains 'admin', they get the Admin role.
-                    string userRole = user.userName.ToLower().Contains("admin") ? "Admin" : "Employee";
+                    // 2. Security Check: Is the account active?
+                    if (!user.isActive)
+                    {
+                        ModelState.AddModelError("", "This account has been deactivated. Please contact HR.");
+                        return View(model);
+                    }
+
+                    // 3. Assign Role based on the new roleId column
+                    // Rule: 1 = Admin, Anything else = Employee
+                    string userRole = (user.roleId == 1) ? "Admin" : "Employee";
 
                     var claims = new List<Claim>
                     {
@@ -54,14 +60,19 @@ namespace PECCI_HRIS.Controllers
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                    // Signs the user in and establishes their role
+                    // 4. Update Audit Data: Log the login time
+                    user.lastLoginDate = DateTime.Now;
+                    user.failedLoginAttempts = 0; // Reset attempts on success
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity));
 
-                    // Redirects to Dashboard on success
                     return RedirectToAction("Index", "Dashboard");
                 }
 
+                // Optional: Increment failedLoginAttempts here if you want to implement lockouts later!
                 ModelState.AddModelError("", "Invalid username or password.");
             }
             return View(model);

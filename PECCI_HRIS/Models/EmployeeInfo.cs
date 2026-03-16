@@ -27,6 +27,8 @@ namespace PECCI_HRIS.Models
 
         public string? areaCode { get; set; }
 
+        public string personalEmail { get; set; }
+
         public string? homeTelNo { get; set; }
 
         public string? cellNo { get; set; }
