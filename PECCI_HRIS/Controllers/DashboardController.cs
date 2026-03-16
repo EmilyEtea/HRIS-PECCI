@@ -4,6 +4,7 @@ using PECCI_HRIS.Data;
 using PECCI_HRIS.Models;
 using System.Linq;
 using System;
+using System.Security.Claims; // Added to access User Claims
 
 namespace PECCI_HRIS.Controllers
 {
@@ -22,9 +23,22 @@ namespace PECCI_HRIS.Controllers
         {
             var today = DateTime.Today;
 
-            var viewModel = _context.UserAccounts.Select(user => new DashboardViewModel
+            // Get the unique ID of the logged-in user from their claims
+            var currentUserId = User.FindFirstValue("EmployeeID");
+
+            // Define the base query for user accounts
+            var userQuery = _context.UserAccounts.AsQueryable();
+
+            // RBAC Logic: Filter data if the user is not an Admin
+            if (!User.IsInRole("Admin"))
+            {
+                userQuery = userQuery.Where(u => u.employeeID == currentUserId);
+            }
+
+            var viewModel = userQuery.Select(user => new DashboardViewModel
             {
                 User = user,
+                // Automated leave status logic
                 IsOnLeave = _context.LeaveRequests.Any(l =>
                     l.employeeID == user.employeeID &&
                     l.supervisorStatus == "Approved" &&
@@ -35,6 +49,7 @@ namespace PECCI_HRIS.Controllers
             return View(viewModel);
         }
 
+        // Restricted to Admins only
         [Authorize(Roles = "Admin")]
         public IActionResult AdminApprovalQueue()
         {

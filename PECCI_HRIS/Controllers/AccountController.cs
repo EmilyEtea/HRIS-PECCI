@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 namespace PECCI_HRIS.Controllers
-
 {
     public class AccountController : Controller
     {
@@ -20,8 +19,16 @@ namespace PECCI_HRIS.Controllers
             _context = context;
         }
 
+        // GET: /Account/Login
         public IActionResult Login()
         {
+            // NEW LOGIC: If the user is already logged in, bounce them back to the Dashboard
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            // Otherwise, show the normal login screen
             return View();
         }
 
