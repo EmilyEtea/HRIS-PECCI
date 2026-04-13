@@ -13,12 +13,12 @@ namespace PECCI_HRIS.Models
         public string userName { get; set; }
         public string userPassword { get; set; }
 
-        // NEW: Requested Columns
-        public int RoleId { get; set; }
-        public bool IsActive { get; set; } // Bit in SQL becomes bool in C#
-        public int FailedLoginAttempts { get; set; }
-        public DateTime? PasswordChangeDate { get; set; }
-        public DateTime? LastLoginDate { get; set; }
-        public DateTime CreatedDate { get; set; }
+        // MATCHING SQL CASING: lowercase first letters
+        public int roleId { get; set; }
+        public bool isActive { get; set; }
+        public int failedLoginAttempts { get; set; }
+        public DateTime? passwordChangeDate { get; set; }
+        public DateTime? lastLoginDate { get; set; }
+        public DateTime createdDate { get; set; }
     }
 }

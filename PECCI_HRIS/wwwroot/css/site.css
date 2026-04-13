@@ -1,22 +1,107 @@
-html {
-  font-size: 14px;
+/* --- BASE SYSTEM STYLES --- */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
+}
+
+/* Fix for modern layout: Removes the default bottom margin that causes footer gaps */
+body {
+    display: flex;
+    flex-direction: column;
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+/* --- SIDEBAR ARCHITECTURE --- */
+.sidebar-admin {
+    background-color: #2D4A36 !important; /* Dark Forest Green */
+    color: white !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
 }
 
-body {
-  margin-bottom: 60px;
+/* Sidebar Logo Area */
+.sidebar-logo-card {
+    background-color: #F8FFF9;
+    border-radius: 15px;
+    padding: 10px;
+    margin-bottom: 25px;
+}
+
+/* Navigation Links */
+.sidebar-admin .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    padding: 12px 15px;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+}
+
+    .sidebar-admin .nav-link i {
+        font-size: 1.2rem;
+        width: 30px;
+    }
+
+    /* Active Capsule State (Bright Emerald) */
+    .sidebar-admin .nav-link.active {
+        background-color: #00C853 !important; /* Bright Green from mockup */
+        color: white !important;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-admin .nav-link:hover:not(.active) {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white !important;
+    }
+
+/* Sub-menu styling */
+.sidebar-submenu {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 5px 0;
+}
+
+    .sidebar-submenu .nav-link {
+        font-size: 0.9rem;
+        padding: 8px 15px 8px 45px;
+    }
+
+/* Chevron arrows */
+.dropdown-toggle::after {
+    margin-left: auto;
+}
+
+/* --- MAIN CONTENT & FOOTER PINNING --- */
+.flex-grow-1.bg-light {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main[role="main"] {
+    flex: 1 0 auto; /* Forces main content to grow and push footer down */
+}
+
+footer.footer {
+    flex-shrink: 0;
+    background-color: white !important;
+    width: 100%;
 }
