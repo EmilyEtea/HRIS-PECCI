@@ -13,7 +13,7 @@
     <div class="d-flex flex-row" style="min-height: 100vh;">
 
         <nav class="sidebar-admin d-flex flex-column flex-shrink-0 p-3 shadow" style="width: 260px;">
-            
+
             <div class="sidebar-logo-card d-flex align-items-center shadow-sm">
                 <div class="bg-success rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 45px; height: 45px;">
                     <i class="bi bi-people-fill text-white fs-4"></i>
@@ -25,10 +25,10 @@
             </div>
 
             <p class="text-white-50 small fw-bold mb-2 ps-2" style="font-size: 0.7rem;">MAIN MENU</p>
-            
-            <ul class="nav flex-column mb-auto">
+
+            <ul class="nav flex-column mb-auto" id="sidebarNav">
                 <li class="nav-item">
-                    <a asp-controller="Dashboard" asp-action="Index" 
+                    <a asp-controller="Dashboard" asp-action="Index"
                        class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Dashboard" ? "active" : "")">
                         <i class="bi bi-house-door"></i> Dashboard
                     </a>
@@ -37,21 +37,21 @@
                 @if (User.IsInRole("Admin"))
                 {
                     <li class="nav-item">
-                        <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Account" && ViewContext.RouteData.Values["Action"]?.ToString() != "Logout" ? "active" : "")" 
+                        <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Account" && ViewContext.RouteData.Values["Action"]?.ToString() != "Logout" ? "active" : "")"
                            data-bs-toggle="collapse" href="#accountsMenu" role="button">
                             <i class="bi bi-person-lock"></i> Accounts
                         </a>
                         <div class="collapse @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Account" && ViewContext.RouteData.Values["Action"]?.ToString() != "Logout" ? "show" : "")" id="accountsMenu">
                             <ul class="nav flex-column sidebar-submenu">
-                                <li><a href="#" class="nav-link">Profile</a></li>
-                                <li><a href="#" class="nav-link">Employees Profile</a></li>
+                                <li><a asp-controller="Account" asp-action="Profile" class="nav-link">Profile</a></li>
+                                <li><a asp-controller="Account" asp-action="UserManagement" class="nav-link">Employees Profile</a></li>
                             </ul>
                         </div>
                     </li>
                 }
 
                 <li class="nav-item">
-                    <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Leave" ? "active" : "")" 
+                    <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Leave" ? "active" : "")"
                        data-bs-toggle="collapse" href="#employeesMenu" role="button">
                         <i class="bi bi-people"></i> @(User.IsInRole("Admin") ? "Employees" : "My Requests")
                     </a>
@@ -64,12 +64,13 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#attendanceMenu" role="button">
+                    <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Attendance" ? "active" : "")"
+                       data-bs-toggle="collapse" href="#attendanceMenu" role="button">
                         <i class="bi bi-clock"></i> @(User.IsInRole("Admin") ? "Attendance" : "My Attendance")
                     </a>
-                    <div class="collapse" id="attendanceMenu">
+                    <div class="collapse @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Attendance" ? "show" : "")" id="attendanceMenu">
                         <ul class="nav flex-column sidebar-submenu">
-                            <li><a href="#" class="nav-link">Daily Logs</a></li>
+                            <li><a asp-controller="Attendance" asp-action="DailyLogs" class="nav-link">Daily Logs</a></li>
                         </ul>
                     </div>
                 </li>
@@ -77,22 +78,30 @@
                 @if (User.IsInRole("Admin"))
                 {
                     <li class="nav-item">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#payrollMenu" role="button">
+                        <a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Payroll" ? "active" : "")"
+                           data-bs-toggle="collapse" href="#payrollMenu" role="button">
                             <i class="bi bi-cash-stack"></i> Payroll
                         </a>
-                        <div class="collapse" id="payrollMenu">
+                        <div class="collapse @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Payroll" ? "show" : "")" id="payrollMenu">
                             <ul class="nav flex-column sidebar-submenu">
-                                <li><a href="#" class="nav-link">Gross Pay</a></li>
-                                <li><a href="#" class="nav-link">Benefits</a></li>
+                                <li><a asp-controller="Payroll" asp-action="GrossPay" class="nav-link">Gross Pay</a></li>
+                                <li><a asp-controller="Payroll" asp-action="Benefits" class="nav-link">Benefits</a></li>
                             </ul>
                         </div>
                     </li>
 
                     <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="bi bi-calendar3"></i> Calendar</a>
+                        <a asp-controller="Calendar" asp-action="Index"
+                           class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Calendar" ? "active" : "")">
+                            <i class="bi bi-calendar3"></i> Calendar
+                        </a>
                     </li>
+
                     <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="bi bi-gear"></i> Settings</a>
+                        <a asp-controller="Settings" asp-action="Index"
+                           class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Settings" ? "active" : "")">
+                            <i class="bi bi-gear"></i> Settings
+                        </a>
                     </li>
                 }
             </ul>
@@ -100,7 +109,7 @@
             <hr class="text-white-50">
             <div class="pb-2">
                 <a asp-controller="Account" asp-action="Logout" class="nav-link text-white">
-                    <i class="bi bi-box-arrow-right text-danger"></i> 
+                    <i class="bi bi-box-arrow-right text-danger"></i>
                     <span class="text-danger fw-bold">Logout</span>
                 </a>
             </div>
@@ -122,6 +131,21 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const navLinks = document.querySelectorAll(".sidebar-admin .nav-link");
+            navLinks.forEach(link => {
+                link.addEventListener("click", function() {
+                    if(!this.classList.contains('active')) {
+                        navLinks.forEach(l => l.classList.remove("active"));
+                        this.classList.add("active");
+                    }
+                });
+            });
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
