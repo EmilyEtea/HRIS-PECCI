@@ -4,11 +4,12 @@ using PECCI_HRIS.Data;
 using PECCI_HRIS.Models;
 using System.Linq;
 using System;
-using System.Security.Claims; // Added to access User Claims
+using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace PECCI_HRIS.Controllers
 {
-    [Authorize] // Ensures only logged-in users enter
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,38 +19,68 @@ namespace PECCI_HRIS.Controllers
             _context = context;
         }
 
-        // GET: Dashboard
         public IActionResult Index()
         {
             var today = DateTime.Today;
-
-            // Get the unique ID of the logged-in user from their claims
             var currentUserId = User.FindFirstValue("EmployeeID");
 
-            // Define the base query for user accounts
-            var userQuery = _context.UserAccounts.AsQueryable();
+            // 1. Initialize the ViewModel
+            var viewModel = new DashboardViewModel();
 
-            // RBAC Logic: Filter data if the user is not an Admin
-            if (!User.IsInRole("Admin"))
-            {
-                userQuery = userQuery.Where(u => u.employeeID == currentUserId);
-            }
+            // 2. Fetch the Logged-in User Info
+            var currentUserAccount = _context.UserAccounts
+                .FirstOrDefault(u => u.employeeID == currentUserId);
 
-            var viewModel = userQuery.Select(user => new DashboardViewModel
+            if (currentUserAccount != null)
             {
-                User = user,
-                // Automated leave status logic
-                IsOnLeave = _context.LeaveRequests.Any(l =>
-                    l.employeeID == user.employeeID &&
+                viewModel.User = currentUserAccount;
+                viewModel.IsOnLeave = _context.LeaveRequests.Any(l =>
+                    l.employeeID == currentUserAccount.employeeID &&
                     l.supervisorStatus == "Approved" &&
                     l.gmStatus == "Approved" &&
-                    today >= l.startDate && today <= l.endDate)
-            }).ToList();
+                    today >= l.startDate && today <= l.endDate);
+            }
+
+            // 3. Sprint 1 Admin Stats - Only calculate these if the user is an Admin
+            if (User.IsInRole("Admin"))
+            {
+                // Summary Card Queries using your actual Model property names
+                viewModel.TotalEmployees = _context.UserAccounts.Count();
+
+                // Fixed: isActive is a bool in your model, no need for '== 1'
+                viewModel.ActiveEmployees = _context.UserAccounts.Count(u => u.isActive);
+
+                // Fixed: using 'employeeDepartment' instead of 'department'
+                viewModel.TotalDepartments = _context.UserAccounts
+                    .Select(u => u.employeeDepartment)
+                    .Distinct()
+                    .Count();
+
+                // Fixed: using 'createdDate' instead of 'dateCreated'
+                var thirtyDaysAgo = DateTime.Now.AddDays(-30);
+                viewModel.RecentHiresCount = _context.UserAccounts
+                    .Count(u => u.createdDate >= thirtyDaysAgo);
+
+                // 4. Fetch Recent Employees for the Table
+                viewModel.RecentEmployees = _context.UserAccounts
+                    .OrderByDescending(u => u.createdDate)
+                    .Take(5)
+                    .Select(u => new EmployeeListViewModel
+                    {
+                        // Using userName as the display name for now per your model
+                        FullName = u.userName,
+                        Department = u.employeeDepartment,
+                        Status = _context.LeaveRequests.Any(l =>
+                                    l.employeeID == u.employeeID &&
+                                    today >= l.startDate &&
+                                    today <= l.endDate)
+                                 ? "On Leave" : "Active"
+                    }).ToList();
+            }
 
             return View(viewModel);
         }
 
-        // Restricted to Admins only
         [Authorize(Roles = "Admin")]
         public IActionResult AdminApprovalQueue()
         {
