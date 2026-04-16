@@ -24,10 +24,8 @@ namespace PECCI_HRIS.Controllers
             var today = DateTime.Today;
             var currentUserId = User.FindFirstValue("EmployeeID");
 
-            // 1. Initialize the ViewModel
             var viewModel = new DashboardViewModel();
 
-            // 2. Fetch the Logged-in User Info
             var currentUserAccount = _context.UserAccounts
                 .FirstOrDefault(u => u.employeeID == currentUserId);
 
@@ -41,33 +39,23 @@ namespace PECCI_HRIS.Controllers
                     today >= l.startDate && today <= l.endDate);
             }
 
-            // 3. Sprint 1 Admin Stats - Only calculate these if the user is an Admin
             if (User.IsInRole("Admin"))
             {
-                // Summary Card Queries using your actual Model property names
+                // --- ADMIN VIEW LOGIC ---
                 viewModel.TotalEmployees = _context.UserAccounts.Count();
-
-                // Fixed: isActive is a bool in your model, no need for '== 1'
                 viewModel.ActiveEmployees = _context.UserAccounts.Count(u => u.isActive);
-
-                // Fixed: using 'employeeDepartment' instead of 'department'
                 viewModel.TotalDepartments = _context.UserAccounts
-                    .Select(u => u.employeeDepartment)
-                    .Distinct()
-                    .Count();
+                    .Select(u => u.employeeDepartment).Distinct().Count();
 
-                // Fixed: using 'createdDate' instead of 'dateCreated'
                 var thirtyDaysAgo = DateTime.Now.AddDays(-30);
                 viewModel.RecentHiresCount = _context.UserAccounts
                     .Count(u => u.createdDate >= thirtyDaysAgo);
 
-                // 4. Fetch Recent Employees for the Table
                 viewModel.RecentEmployees = _context.UserAccounts
                     .OrderByDescending(u => u.createdDate)
                     .Take(5)
                     .Select(u => new EmployeeListViewModel
                     {
-                        // Using userName as the display name for now per your model
                         FullName = u.userName,
                         Department = u.employeeDepartment,
                         Status = _context.LeaveRequests.Any(l =>
@@ -75,6 +63,31 @@ namespace PECCI_HRIS.Controllers
                                     today >= l.startDate &&
                                     today <= l.endDate)
                                  ? "On Leave" : "Active"
+                    }).ToList();
+            }
+            else
+            {
+                // --- EMPLOYEE VIEW LOGIC (Sprint 1 Self-Service) ---
+
+                // 1. Personal Stats (Mapping to your card properties)
+                // In a real scenario, you'd pull from an Attendance table. 
+                // For now, let's show their personal Leave Request count as a stat.
+                viewModel.TotalEmployees = _context.LeaveRequests.Count(l => l.employeeID == currentUserId);
+                // We can label this "My Requests" in the View
+
+                viewModel.ActiveEmployees = _context.LeaveRequests.Count(l => l.employeeID == currentUserId && l.gmStatus == "Approved");
+                // Label: "Approved Leaves"
+
+                // 2. Personal History (Recent Requests instead of Recent Employees)
+                viewModel.RecentEmployees = _context.LeaveRequests
+                    .Where(l => l.employeeID == currentUserId)
+                    .OrderByDescending(l => l.startDate)
+                    .Take(5)
+                    .Select(l => new EmployeeListViewModel
+                    {
+                        FullName = l.leaveType ?? "Leave Request",
+                        Department = l.startDate.ToString("MM/dd/yyyy"), // Use Dept field to show Date
+                        Status = l.gmStatus ?? "Pending"
                     }).ToList();
             }
 

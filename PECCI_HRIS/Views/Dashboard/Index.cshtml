@@ -1,12 +1,12 @@
 ﻿@model PECCI_HRIS.Models.DashboardViewModel
 
 @{
-    // This title is automatically pushed to the top navbar in _Layout
-    ViewData["Title"] = "Admin Dashboard";
+    // Dynamically set the title based on the user's role
+    ViewData["Title"] = User.IsInRole("Admin") ? "Admin Dashboard" : "Employee Dashboard";
 }
 
 <div class="container-fluid pt-2">
-    <p class="text-success fw-bold mb-4">Welcome, @(Model.User?.userName ?? "Admin Name")!</p>
+    <p class="text-success fw-bold mb-4">Welcome, @(Model.User?.userName ?? "User")!</p>
 
     <div class="row mb-4">
         <div class="col-md-3">
@@ -14,7 +14,7 @@
                 <div class="card-body d-flex align-items-center justify-content-between p-3">
                     <div>
                         <h2 class="fw-bold mb-0">@Model.TotalEmployees</h2>
-                        <small class="opacity-75">Total Employees</small>
+                        <small class="opacity-75">@(User.IsInRole("Admin") ? "Total Employees" : "My Requests")</small>
                     </div>
                     <i class="bi bi-people-fill fs-1 opacity-50"></i>
                 </div>
@@ -26,7 +26,7 @@
                 <div class="card-body d-flex align-items-center justify-content-between p-3">
                     <div>
                         <h2 class="fw-bold mb-0">@Model.ActiveEmployees</h2>
-                        <small class="opacity-75">Active Employees</small>
+                        <small class="opacity-75">@(User.IsInRole("Admin") ? "Active Employees" : "Approved")</small>
                     </div>
                     <i class="bi bi-person-check-fill fs-1 opacity-50"></i>
                 </div>
@@ -38,7 +38,7 @@
                 <div class="card-body d-flex align-items-center justify-content-between p-3">
                     <div>
                         <h2 class="fw-bold mb-0">@Model.TotalDepartments</h2>
-                        <small class="opacity-75">Departments</small>
+                        <small class="opacity-75">@(User.IsInRole("Admin") ? "Departments" : "Available Credits")</small>
                     </div>
                     <i class="bi bi-building fs-1 opacity-50"></i>
                 </div>
@@ -50,7 +50,7 @@
                 <div class="card-body d-flex align-items-center justify-content-between p-3">
                     <div>
                         <h2 class="fw-bold mb-0">@Model.RecentHiresCount</h2>
-                        <small class="opacity-75">Recent Hires</small>
+                        <small class="opacity-75">@(User.IsInRole("Admin") ? "Recent Hires" : "Pending Status")</small>
                     </div>
                     <i class="bi bi-briefcase-fill fs-1 opacity-50"></i>
                 </div>
@@ -60,7 +60,7 @@
 
     <div class="card border-0 shadow-sm" style="border-radius: 15px;">
         <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
-            <h5 class="fw-bold mb-0">Recent Employees</h5>
+            <h5 class="fw-bold mb-0">@(User.IsInRole("Admin") ? "Recent Employees" : "My Recent Requests")</h5>
 
             <div class="d-flex align-items-center">
                 <div class="input-group me-2" style="width: 250px;">
@@ -75,8 +75,8 @@
             <table class="table align-middle mb-0">
                 <thead style="background-color: #58D68D; color: white;">
                     <tr>
-                        <th class="ps-4 py-3 text-uppercase small fw-bold">Employee</th>
-                        <th class="text-uppercase small fw-bold">Department</th>
+                        <th class="ps-4 py-3 text-uppercase small fw-bold">@(User.IsInRole("Admin") ? "Employee" : "Request Type")</th>
+                        <th class="text-uppercase small fw-bold">@(User.IsInRole("Admin") ? "Department" : "Date")</th>
                         <th class="text-uppercase small fw-bold">Status</th>
                         <th class="text-center text-uppercase small fw-bold">Action</th>
                     </tr>
@@ -97,13 +97,17 @@
                                 </td>
                                 <td><span class="text-muted">@item.Department</span></td>
                                 <td>
-                                    @if (item.Status == "On Leave")
+                                    @if (item.Status == "On Leave" || item.Status == "Pending")
                                     {
-                                        <span class="badge rounded-pill bg-warning text-dark px-3 py-2">On Leave</span>
+                                        <span class="badge rounded-pill bg-warning text-dark px-3 py-2">@item.Status</span>
+                                    }
+                                    else if (item.Status == "Active" || item.Status == "Approved")
+                                    {
+                                        <span class="badge rounded-pill bg-success-light text-success px-3 py-2" style="background-color: #D5F5E3;">@item.Status</span>
                                     }
                                     else
                                     {
-                                        <span class="badge rounded-pill bg-success-light text-success px-3 py-2" style="background-color: #D5F5E3;">Active</span>
+                                        <span class="badge rounded-pill bg-secondary text-white px-3 py-2">@item.Status</span>
                                     }
                                 </td>
                                 <td class="text-center">

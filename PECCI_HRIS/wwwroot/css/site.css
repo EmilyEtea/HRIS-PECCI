@@ -135,3 +135,81 @@ footer.footer {
     .bi-bell-fill:hover {
         transform: scale(1.1);
     }
+
+
+/* --- LOGIN PAGE STYLES (NEW) --- */
+.login-body {
+    /* Gradient from Mockup: Green to Orange */
+    background: linear-gradient(135deg, #57b846 0%, #f18c21 100%) !important;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.login-card {
+    background-color: #FFFDF9; /* Off-white background */
+    border-radius: 25px;
+    padding: 3.5rem;
+    width: 100%;
+    max-width: 550px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.login-title {
+    font-weight: 800;
+    font-size: 2.3rem;
+    color: #000;
+    line-height: 1.2;
+    margin-bottom: 1.8rem;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.login-welcome {
+    color: #4CAF50;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}
+
+.login-instruction {
+    color: #333;
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+}
+
+.login-btn {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    padding: 12px 50px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1.1rem;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+    .login-btn:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    }
+
+.forgot-password {
+    color: #333;
+    text-decoration: underline;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    display: inline-block;
+}
+
+.password-toggle-icon {
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s;
+}
+
+    .password-toggle-icon:hover {
+        color: #333;
+    }
