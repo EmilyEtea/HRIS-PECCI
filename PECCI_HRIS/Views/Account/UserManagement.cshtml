@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Employee Information";
+}
+
+@model PECCI_HRIS.Models.AddEmployeeViewModel
+
+<div class="container-fluid p-4">
+    <div class="card shadow-sm border-0" style="border-radius: 20px;">
+        <div class="card-header bg-white pt-5 px-5 border-0 text-center">
+            <h2 class="fw-bold mb-0" style="color: #2D4A36;">PECCI Human Resources Information System</h2>
+            <p class="text-success fw-bold mt-2">Add New Employee Profile</p>
+        </div>
+
+        <div class="card-body p-5">
+            <form asp-action="UserManagement" method="post">
+
+                <div class="mb-5">
+                    <h5 class="fw-bold mb-4" style="color: #FF8A3D;">PERSONAL INFORMATION</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3"><label class="small fw-bold">Last Name:</label><input asp-for="LastName" class="form-control bg-light border-0 py-2" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">First Name:</label><input asp-for="FirstName" class="form-control bg-light border-0 py-2" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">Middle Name:</label><input asp-for="MiddleName" class="form-control bg-light border-0 py-2" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">Suffix:</label><input asp-for="Suffix" class="form-control bg-light border-0 py-2" /></div>
+
+                        <div class="col-md-3">
+                            <label class="small fw-bold">Gender:</label>
+                            <select asp-for="Sex" class="form-select bg-light border-0"><option value="M">Male</option><option value="F">Female</option></select>
+                        </div>
+                        <div class="col-md-3"><label class="small fw-bold">Date of Birth:</label><input asp-for="DateOfBirth" type="date" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">Place of Birth:</label><input asp-for="PlaceOfBirth" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">Civil Status:</label><input asp-for="CivilStatus" class="form-control bg-light border-0" /></div>
+
+                        <div class="col-md-6"><label class="small fw-bold">Name of Spouse:</label><input asp-for="NameOfSpouse" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">Home Tel No:</label><input asp-for="HomeTelNo" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">Cell No:</label><input asp-for="CellNo" class="form-control bg-light border-0" /></div>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <h5 class="fw-bold mb-4" style="color: #FF8A3D;">RESIDENTIAL ADDRESS</h5>
+                    <div class="row g-3">
+                        <div class="col-md-12"><label class="small fw-bold">Full Address:</label><input asp-for="ResidentialAddress" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">Region:</label><input asp-for="Region" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">Province:</label><input asp-for="Province" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">Municipality:</label><input asp-for="Municipality" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">Barangay:</label><input asp-for="Barangay" class="form-control bg-light border-0" /></div>
+
+                        <div class="col-md-2"><label class="small fw-bold">Lot/Unit No:</label><input asp-for="LotUnitNo" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-2"><label class="small fw-bold">Block No:</label><input asp-for="BlockNo" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-5"><label class="small fw-bold">Village/Subd/Condo:</label><input asp-for="VillageSubdivisionCondoName" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">Zip Code:</label><input asp-for="ZipCode" class="form-control bg-light border-0" /></div>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <h5 class="fw-bold mb-4" style="color: #FF8A3D;">GOVERNMENT & BANKING</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3"><label class="small fw-bold">TIN No:</label><input asp-for="TinNo" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">SSS No:</label><input asp-for="SssNo" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">Bank Name:</label><input asp-for="BankName" class="form-control bg-light border-0" /></div>
+                        <div class="col-md-3"><label class="small fw-bold">ATM No:</label><input asp-for="AtmNo" class="form-control bg-light border-0" /></div>
+                    </div>
+                </div>
+
+                <div class="text-end pt-4">
+                    <button type="submit" class="btn btn-success px-5 py-2 fw-bold shadow-sm" style="border-radius: 12px;">REGISTER EMPLOYEE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
