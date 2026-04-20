@@ -1,32 +1,40 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PECCI_HRIS.Models
 {
     public class LeaveRequest
     {
         [Key]
-        public int leaveRequestID { get; set; } // INT AUTO-INCREMENT
+        public int leaveRequestID { get; set; }
 
         [Required]
-        public string employeeID { get; set; } = null!; // VARCHAR(10)
+        [StringLength(10)]
+        public string employeeID { get; set; } = null!;
 
-        public string leaveType { get; set; } = null!; // VARCHAR(50)
+        [Required]
+        [StringLength(50)]
+        public string leaveType { get; set; } = null!;
 
-        public DateTime startDate { get; set; } // DATE
+        [Required]
+        public DateTime startDate { get; set; }
 
-        public DateTime endDate { get; set; } // DATE
+        [Required]
+        public DateTime endDate { get; set; }
 
-        public string? supervisorSignature { get; set; } // VARCHAR(100) (URL)
+        // Nullable because these are filled during the approval process
+        [StringLength(100)]
+        public string? supervisorSignature { get; set; }
 
-        public string supervisorStatus { get; set; } = "Pending"; // VARCHAR(15)
+        [StringLength(15)]
+        public string? supervisorStatus { get; set; }
 
-        public string? gmSignature { get; set; } // VARCHAR(100) (URL)
+        [StringLength(100)]
+        public string? gmSignature { get; set; }
 
-        public string gmStatus { get; set; } = "Pending"; // VARCHAR(15)
+        [StringLength(15)]
+        public string? gmStatus { get; set; }
 
-        public DateTime? dateFiled { get; set; } = DateTime.Now; // DATETIME
-
-        // Logic: Calculate total days automatically based on start and end date
-        public int TotalDays => (endDate - startDate).Days + 1;
+        public DateTime? dateFiled { get; set; }
     }
 }

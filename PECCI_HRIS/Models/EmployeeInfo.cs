@@ -1,46 +1,73 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PECCI_HRIS.Models
 {
     public class EmployeeInfo
     {
         [Key]
-        public string employeeID { get; set; } = null!; // Fixed
+        [StringLength(10)]
+        public string employeeID { get; set; } = null!;
 
-        public string lastName { get; set; } = null!; // Fixed
+        [Required]
+        [StringLength(50)]
+        public string lastName { get; set; } = null!;
 
-        public string firstName { get; set; } = null!; // Fixed
+        [Required]
+        [StringLength(50)]
+        public string firstName { get; set; } = null!;
 
-        public string middleName { get; set; } = null!; // Fixed
+        [Required]
+        [StringLength(50)]
+        public string middleName { get; set; } = null!;
 
-        public string? suffix { get; set; } // Already handled by ?
+        [StringLength(10)]
+        public string? suffix { get; set; } // Nullable in SQL
 
-        public string sex { get; set; } = null!; // Fixed
+        [Required]
+        [StringLength(1)]
+        public string sex { get; set; } = null!;
 
-        public DateTime? dateOfBirth { get; set; } // Added ? to match SSMS
+        [Required]
+        public DateTime dateOfBirth { get; set; } // NOT NULL in SQL
 
-        public string? placeOfBirth { get; set; }
+        [StringLength(100)]
+        public string? placeOfBirth { get; set; } // Nullable in SQL
 
-        public string civilStatus { get; set; } = null!; // Fixed
+        [Required]
+        [StringLength(10)]
+        public string civilStatus { get; set; } = null!;
 
-        public string? nameOfSpouse { get; set; }
+        [StringLength(100)]
+        public string? nameOfSpouse { get; set; } // Nullable in SQL
 
-        public string? areaCode { get; set; }
+        [StringLength(5)]
+        public string? areaCode { get; set; } // Nullable in SQL
 
-        public string personalEmail { get; set; }
+        [StringLength(20)]
+        public string? homeTelNo { get; set; } // Nullable in SQL
 
-        public string? homeTelNo { get; set; }
+        [StringLength(20)]
+        public string? cellNo { get; set; } // Nullable in SQL
 
-        public string? cellNo { get; set; }
+        [Required]
+        [StringLength(20)]
+        public string tinNo { get; set; } = null!; // NOT NULL in SQL
 
-        public string tinNo { get; set; } = null!; // Fixed
+        [StringLength(20)]
+        public string? sssNo { get; set; } // Nullable in SQL
 
-        public string? sssNo { get; set; }
+        [StringLength(10)]
+        public string? bankName { get; set; } // Nullable in SQL
 
-        public string? bankName { get; set; }
+        [StringLength(50)]
+        public string? atmNo { get; set; } // Nullable in SQL
 
-        public string? atmNo { get; set; }
+        public byte[]? employeeimage { get; set; } // Nullable varbinary(MAX)
 
-        public byte[]? employeeimage { get; set; }
+        [Required]
+        [EmailAddress]
+        [StringLength(100)]
+        public string personalEmail { get; set; } = null!; // NOT NULL in SQL
     }
 }

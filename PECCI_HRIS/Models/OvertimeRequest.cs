@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PECCI_HRIS.Models
 {
@@ -7,16 +8,44 @@ namespace PECCI_HRIS.Models
     {
         [Key]
         public int overtimeRequestID { get; set; }
-        public string employeeID { get; set; }
+
+        [Required]
+        [StringLength(10)]
+        public string employeeID { get; set; } = null!;
+
+        [Required]
         public DateTime overtimeDate { get; set; }
-        public string overtimeReason { get; set; }
-        public TimeSpan startTime { get; set; }
-        public TimeSpan endTime { get; set; }
+
+        [StringLength(255)]
+        public string? overtimeReason { get; set; } // Nullable in SQL
+
+        [Required]
+        public TimeSpan startTime { get; set; } // time(7)
+
+        [Required]
+        public TimeSpan endTime { get; set; } // time(7)
+
+        [Required]
+        [Column(TypeName = "decimal(4, 2)")]
         public decimal numOfHours { get; set; }
-        public string supervisorSignature { get; set; }
-        public string supervisorStatus { get; set; }
-        public string gmSignature { get; set; }
-        public string gmStatus { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string supervisorSignature { get; set; } = null!;
+
+        [Required]
+        [StringLength(20)]
+        public string supervisorStatus { get; set; } = null!;
+
+        [Required]
+        [StringLength(100)]
+        public string gmSignature { get; set; } = null!;
+
+        [Required]
+        [StringLength(20)]
+        public string gmStatus { get; set; } = null!;
+
+        [Required]
         public DateTime dateFiled { get; set; }
     }
 }

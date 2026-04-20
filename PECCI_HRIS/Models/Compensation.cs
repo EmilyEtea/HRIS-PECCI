@@ -1,11 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PECCI_HRIS.Models
 {
     public class Compensation
     {
-        [Key] // In a 1-to-1 table, the Foreign Key acts as the Primary Key
-        public string employeeID { get; set; }
+        [Key]
+        [StringLength(10)]
+        public string employeeID { get; set; } = null!;
+
+        [Required]
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal monthlyBasicSalary { get; set; }
     }
 }

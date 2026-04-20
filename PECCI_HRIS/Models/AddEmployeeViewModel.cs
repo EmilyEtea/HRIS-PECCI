@@ -1,44 +1,102 @@
-﻿namespace PECCI_HRIS.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace PECCI_HRIS.Models
 {
     public class AddEmployeeViewModel
     {
-        // tbl_user_account
-        public string EmployeeID { get; set; }
-        public string UserName { get; set; }
-        public string UserPassword { get; set; }
-        public string EmployeeDepartment { get; set; }
-        public string EmploymentStatus { get; set; }
+        // --- tbl_user_account ---
+        [Required(ErrorMessage = "Employee ID is required")]
+        [StringLength(10)]
+        public string EmployeeID { get; set; } = null!;
+
+        [Required(ErrorMessage = "Username is required")]
+        [StringLength(50)]
+        public string UserName { get; set; } = null!;
+
+        [Required(ErrorMessage = "Password is required")]
+        [DataType(DataType.Password)]
+        [StringLength(50)]
+        public string UserPassword { get; set; } = null!;
+
+        [Required]
+        public string EmployeeDepartment { get; set; } = null!;
+
+        [Required]
+        public string EmploymentStatus { get; set; } = null!;
+
+        [Required]
         public int RoleId { get; set; }
 
-        // tbl_employee_info
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
-        public string MiddleName { get; set; }
-        public string Suffix { get; set; }
-        public string Sex { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public string PlaceOfBirth { get; set; }
-        public string CivilStatus { get; set; }
-        public string NameOfSpouse { get; set; }
-        public string AreaCode { get; set; }
-        public string HomeTelNo { get; set; }
-        public string CellNo { get; set; }
-        public string TinNo { get; set; }
-        public string SssNo { get; set; }
-        public string BankName { get; set; }
-        public string AtmNo { get; set; }
+        // --- tbl_employee_info ---
+        [Required]
+        public string LastName { get; set; } = null!;
 
-        // tbl_employee_residential_address
-        public string ResidentialAddress { get; set; }
-        public string Region { get; set; }
-        public string Province { get; set; }
-        public string Municipality { get; set; }
-        public string Barangay { get; set; }
-        public string StreetNo { get; set; }
-        public string StreetName { get; set; }
-        public string ZipCode { get; set; }
-        public string VillageSubdivisionCondoName { get; set; }
-        public string LotUnitNo { get; set; }
-        public string BlockNo { get; set; }
+        [Required]
+        public string FirstName { get; set; } = null!;
+
+        [Required]
+        public string MiddleName { get; set; } = null!;
+
+        public string? Suffix { get; set; } // Matches nullable in DB
+
+        [Required]
+        public string Sex { get; set; } = null!;
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime DateOfBirth { get; set; }
+
+        public string? PlaceOfBirth { get; set; } // Matches nullable in DB
+
+        [Required]
+        public string CivilStatus { get; set; } = null!;
+
+        public string? NameOfSpouse { get; set; } // Matches nullable in DB
+
+        // NEW: Required because we moved it to tbl_employee_info
+        [Required]
+        [EmailAddress]
+        public string PersonalEmail { get; set; } = null!;
+
+        public string? AreaCode { get; set; }
+        public string? HomeTelNo { get; set; }
+        public string? CellNo { get; set; }
+
+        [Required]
+        public string TinNo { get; set; } = null!;
+
+        public string? SssNo { get; set; }
+        public string? BankName { get; set; }
+        public string? AtmNo { get; set; }
+
+        // --- tbl_employee_residential_address ---
+        [Required]
+        public string ResidentialAddress { get; set; } = null!;
+
+        [Required]
+        public string Region { get; set; } = null!;
+
+        [Required]
+        public string Province { get; set; } = null!;
+
+        [Required]
+        public string Municipality { get; set; } = null!;
+
+        [Required]
+        public string Barangay { get; set; } = null!;
+
+        [Required]
+        public string StreetNo { get; set; } = null!;
+
+        [Required]
+        public string StreetName { get; set; } = null!;
+
+        [Required]
+        public string ZipCode { get; set; } = null!;
+
+        public string? VillageSubdivisionCondoName { get; set; } // Matches nullable in DB
+        public string? LotUnitNo { get; set; }
+        public string? BlockNo { get; set; }
     }
 }

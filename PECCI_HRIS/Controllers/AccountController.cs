@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization; // Added for security
+using Microsoft.AspNetCore.Authorization; 
 using System.Security.Claims;
 using PECCI_HRIS.Data;
 using PECCI_HRIS.Models;
